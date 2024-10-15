@@ -33,6 +33,7 @@ bool TestZeros() {
 
 bool TestNormal() {
     TimeSpan ts(1, 2, 3);
+    // cout << ts << endl;
     return CheckValues(ts, 1, 2, 3);
 }
 
@@ -54,15 +55,23 @@ bool TestFullConversion() {
     return CheckValues(ts, 91, 31, 30);
 }
 
-// bool TestFloatSeconds() {
-//     TimeSpan ts(127.86);
-//     return CheckValues(ts, 0, 2, 8);
-// }
+bool TestFloatSeconds() {
+    TimeSpan ts(127.86);
+    // cout << ts << endl;
+    return CheckValues(ts, 0, 2, 8);
+}
 
-// bool TestNegativeMinute() {
-//     TimeSpan ts(8, -23, 0);
-//     return CheckValues(ts, 7, 37, 0);
-// }
+bool TestFloatMinutes() {
+    TimeSpan ts(127.86, 0);
+    // cout << ts << endl;
+    return CheckValues(ts, 2, 7, 48);
+}
+
+bool TestNegativeMinute() {
+    TimeSpan ts(8, -23, 0);
+    cout << ts << endl;
+    return CheckValues(ts, 7, 37, 0);
+}
 
 // bool TestNegativeHour() {
 //     TimeSpan ts(-3, 73, 2);
@@ -90,14 +99,15 @@ bool TestFullConversion() {
 
 bool tests() {
     cout << "Testing TimeSpan Class" << endl;
-    if (!defaultCreated()) cout << "Failed: DefaultCreated" << endl;
-    if (!TestZeros()) cout << "Failed: TestZeros" << endl;
-    if (!TestNormal()) cout << "Failed: TestNormal" << endl;
-    if (!TestSecondsConversion()) cout << "Failed: TestSecondsConversion" << endl;
-    if (!TestMinutesConversion()) cout << "Failed: TestMinutesConversion" << endl;
-    if (!TestFullConversion()) cout << "Failed: TestFullConversion" << endl;
-    // if (!TestFloatSeconds()) cout << "Failed: TestFloatSeconds" << endl;
-    // if (!TestNegativeMinute()) cout << "Failed: TestNegativeMinute" << endl;
+    if (!defaultCreated()) cout << "    Failed: DefaultCreated" << endl;
+    if (!TestZeros()) cout << "    Failed: TestZeros" << endl;
+    if (!TestNormal()) cout << "    Failed: TestNormal" << endl;
+    if (!TestSecondsConversion()) cout << "    Failed: TestSecondsConversion" << endl;
+    if (!TestMinutesConversion()) cout << "    Failed: TestMinutesConversion" << endl;
+    if (!TestFullConversion()) cout << "    Failed: TestFullConversion" << endl;
+    if (!TestFloatSeconds()) cout << "    Failed: TestFloatSeconds" << endl;
+    if (!TestFloatMinutes()) cout << "    Failed: TestFloatMinutes" << endl;
+    if (!TestNegativeMinute()) cout << "Failed: TestNegativeMinute" << endl;
     // if (!TestNegativeHour()) cout << "Failed: TestNegativeHour" << endl;
     // if (!TestAdd()) cout << "Failed: TestAdd" << endl;
     // if (!TestAddInPlace) cout << "Failed: TestAddInPlace" << endl;

@@ -15,9 +15,9 @@ class TimeSpan {
         void set_time(int hours, int minutes, int seconds);
 
         // CONSTRUCTOR
-        TimeSpan(int hours, int minutes, int seconds);
-        TimeSpan(int minutes, int seconds);
-        TimeSpan(int seconds);
+        TimeSpan(double hours, double minutes, double seconds);
+        TimeSpan(double minutes, double seconds);
+        TimeSpan(double seconds);
         TimeSpan();
 
         // OPERATOR OVERLOADS
@@ -36,8 +36,9 @@ class TimeSpan {
         friend ostream& operator<<(ostream& stream, const TimeSpan& timeSpan);
 
 
-        void secondsConversion(); // Could be private?
-        void minutesConversion();
+        void secondsConversion(double seconds); // Could be private?
+        void minutesConversion(double minutes, double seconds);
+        void hoursConversion(double hours, double minutes, double seconds);
 
 
 
