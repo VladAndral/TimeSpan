@@ -26,6 +26,9 @@ TimeSpan::TimeSpan(double hours, double minutes, double seconds) : _hours(0), _m
     handleNegativeSeconds(seconds);
 }
 
+/*
+        CONVERTING TIME METHODS
+*/
 double TimeSpan::convertMinutesToSeconds(double minutes) {
     return minutes*60;
 }
@@ -53,39 +56,6 @@ void TimeSpan::secondsConversion(double seconds) { // 127.86 seconds = 2 minutes
     _seconds = convertedSeconds;
     _minutes += convertedMinutes;
     _hours += convertedHours;
-}
-
-void TimeSpan::negativeToPositive(double& hours, double& minutes, double& seconds) {
-
-    if ((seconds != 0) && (abs(seconds-1)) > abs(seconds) ) { // Check if seconds is negative
-        _minutes -= int(-seconds/60)+1; // negative values less than 60 should still remove minutes
-        int secondsDecimal = int(seconds*100)%100; // 86
-        if (secondsDecimal >= 50) {
-            seconds=ceil(seconds); // 7.86 --> 8
-        } else {
-            seconds=floor(seconds); // 7.44 --> 7
-        }
-
-        seconds = int(seconds)%60; // loop around from the subrtraction
-    }
-
-    if ((minutes != 0) && (abs(minutes-1)) > abs(minutes) ) {
-        _hours -= int(-minutes/60)+1;
-        minutes = 60+minutes;
-    }
-
-    if ((hours != 0) && (abs(hours-1)) > abs(hours) ) {
-        // _minutes -= int(-hours/60)+1;
-        // minutes = 60+minutes;
-        //Subtract 60 from minutes for each hour
-        int wholeHours = int(-hours);
-        for (int i = 0; i < wholeHours; i++) {
-            _seconds -= 3600;
-            hours++;
-        }
-
-    }
-
 }
 
 void TimeSpan::handleNegativeSeconds(double seconds) {
@@ -124,8 +94,6 @@ void TimeSpan::handleNegativeMinutes(double minutes) {
 void TimeSpan::handleNegativeHours(double hours) {
     handleNegativeSeconds(convertHoursToSeconds(hours));
 }
-
-
 
 void TimeSpan::set_time(int hours, int minutes, int seconds) {
     double hoursInTermsOfSeconds = convertHoursToSeconds(hours);
