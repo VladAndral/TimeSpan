@@ -37,8 +37,6 @@ class TimeSpan {
 
 
         void secondsConversion(double seconds); // Could be private?
-        void minutesConversion(double minutes, double seconds);
-        void hoursConversion(double hours, double minutes, double seconds);
         void handleNegativeSeconds(double seconds);
         void handleNegativeMinutes(double minutes);
         void handleNegativeHours(double hours);
