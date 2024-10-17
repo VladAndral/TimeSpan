@@ -7,6 +7,13 @@ bool tests();
 
 int main() {
     tests();
+    TimeSpan testObj1, testObj2;
+    cout << "Enter time1, \"h, m, s\" " << endl;
+    cin >> testObj1;
+    cout << "Enter time2, \"h, m, s\" " << endl;
+    cin >> testObj2;
+
+    cout << testObj1+testObj2 << endl;
 
 }
 
@@ -37,11 +44,11 @@ bool TestNormal() {
     return CheckValues(ts, 1, 2, 3);
 }
 
-// bool Test60() {
-//     TimeSpan ts(60, 60, 60);
-//     cout << ts << endl;
-//     return CheckValues(ts, 60, 60, 60);
-// }
+bool Test60() {
+    TimeSpan ts(60, 60, 60);
+    cout << ts << endl;
+    return CheckValues(ts, 60, 60, 60);
+}
 
 bool TestSecondsConversion() {
     TimeSpan ts(90);
@@ -99,31 +106,40 @@ bool TestSetTime() {
 }
 
 
-// bool TestAdd() {
-//     TimeSpan ts1, ts2(5), ts3(7, 0), ts4(4, 0, 0);
-//     TimeSpan add_it_up = ts1 + ts2 + ts3 + ts4;
-//     return CheckValues(add_it_up, 4, 7, 5);
-// }
+bool TestAdd() {
+    TimeSpan ts1, ts2(5), ts3(7, 0), ts4(4, 0, 0);
+    TimeSpan add_it_up = ts1 + ts2 + ts3 + ts4;
+    cout << add_it_up << endl;
+    return CheckValues(add_it_up, 4, 7, 5);
+}
 
-// bool TestAddInPlace() {
-//     TimeSpan ts1(5, 6, 7);
-//     TimeSpan ts2(1, 1, 1);
-//     if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1))) {
-//         return false;
-//     }
-//     ts1 += ts2;
-//     if ((!CheckValues(ts1, 6, 7, 8)) || (!CheckValues(ts2, 1, 1, 1))) {
-//         return false;
-//     }
-//     return true;
-// }
+bool TestAddInPlace() {
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(1, 1, 1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1))) {
+        return false;
+    }
+    ts1 += ts2;
+    // cout << ts1 << endl;
+    if ((!CheckValues(ts1, 6, 7, 8)) || (!CheckValues(ts2, 1, 1, 1))) {
+        return false;
+    } else {
+        return true;
+
+    }
+
+    // ts1 += ts2;
+    // cout << ts1 << endl;
+    // return CheckValues(ts1, 6, 7, 8);
+
+}
 
 bool tests() {
     cout << "Testing TimeSpan Class" << endl;
     if (!defaultCreated()) cout << "    Failed: DefaultCreated" << endl;
     if (!TestZeros()) cout << "    Failed: TestZeros" << endl;
     if (!TestNormal()) cout << "    Failed: TestNormal" << endl;
-    // if (!Test60()) cout << "    Failed: Test60" << endl;
+    if (!Test60()) cout << "    Failed: Test60" << endl;
     if (!TestSecondsConversion()) cout << "    Failed: TestSecondsConversion" << endl;
     if (!TestMinutesConversion()) cout << "    Failed: TestMinutesConversion" << endl;
     if (!TestFullConversion()) cout << "    Failed: TestFullConversion" << endl;
@@ -133,8 +149,8 @@ bool tests() {
     if (!TestNegativeMinute()) cout << "    Failed: TestNegativeMinute" << endl;
     if (!TestNegativeHour()) cout << "    Failed: TestNegativeHour" << endl;
     if (!TestSetTime()) cout << "    Failed: TestSetTime" << endl;
-    // if (!TestAdd()) cout << "	Failed: TestAdd" << endl;
-    // if (!TestAddInPlace) cout << "	Failed: TestAddInPlace" << endl;
+    if (!TestAdd()) cout << "	Failed: TestAdd" << endl;
+    if (!TestAddInPlace()) cout << "	Failed: TestAddInPlace" << endl;
     cout << "Testing Complete" << endl;
     return true;
 }

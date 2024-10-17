@@ -1,5 +1,5 @@
 #include "time_span.h"
-#include <math.h>
+#include <cmath>
 
 using namespace std;
 
@@ -7,17 +7,19 @@ using namespace std;
 /*
     CONSTRUCTOR
 */
-TimeSpan::TimeSpan() : _hours(-999), _minutes(-999), _seconds(-999) {   }
-TimeSpan::TimeSpan(double seconds) : _hours(0), _minutes(0), _seconds(0) {
+TimeSpan::TimeSpan() : _hours(0), _minutes(0), _seconds(0) {   }
 
+TimeSpan::TimeSpan(double seconds) : _hours(0), _minutes(0), _seconds(0) {
     handleNegativeSeconds(seconds);
 }
+
 TimeSpan::TimeSpan(double minutes, double seconds) : _hours(0), _minutes(0), _seconds(0) {
 
     double minutesInTermsOfSeconds = convertMinutesToSeconds(minutes);
     seconds += minutesInTermsOfSeconds;
     handleNegativeSeconds(seconds);
 }
+
 TimeSpan::TimeSpan(double hours, double minutes, double seconds) : _hours(0), _minutes(0), _seconds(0) {
 
     double hoursInTermsOfSeconds = convertHoursToSeconds(hours);
@@ -29,11 +31,11 @@ TimeSpan::TimeSpan(double hours, double minutes, double seconds) : _hours(0), _m
 /*
         CONVERTING TIME METHODS
 */
-double TimeSpan::convertMinutesToSeconds(double minutes) {
+double TimeSpan::convertMinutesToSeconds(double minutes) const {
     return minutes*60;
 }
 
-double TimeSpan::convertHoursToSeconds(double hours) {
+double TimeSpan::convertHoursToSeconds(double hours) const {
     return hours*60*60;
 }
 
@@ -43,7 +45,7 @@ void TimeSpan::secondsConversion(double seconds) { // 127.86 seconds = 2 minutes
     int convertedMinutes = int(timeInMinutes); // 2
     double secondsLeftOverInDecimal = (int(timeInMinutes*100)%100)/100.0; // .13
     double convertedSeconds = 60*secondsLeftOverInDecimal; // 60*.13 = 7.8 (seconds)
-    int secondsDecimal = int(convertedSeconds*100)%100; // 86
+    int secondsDecimal = int(convertedSeconds*100)%100; // .86 --> 86
     if (secondsDecimal >= 50) {
         convertedSeconds=ceil(convertedSeconds); // 7.86 --> 8
     } else {
@@ -95,23 +97,13 @@ void TimeSpan::handleNegativeHours(double hours) {
     handleNegativeSeconds(convertHoursToSeconds(hours));
 }
 
-void TimeSpan::set_time(int hours, int minutes, int seconds) {
-    double hoursInTermsOfSeconds = convertHoursToSeconds(hours);
-    double minutesInTermsOfSeconds = convertMinutesToSeconds(minutes);
-    seconds += minutesInTermsOfSeconds + hoursInTermsOfSeconds;
-    handleNegativeSeconds(seconds);
-}
-
-
-
-
 /*
     GETS AND SETS
 */
 /*
-int hours() const { 
+int hours() const {
 Without the 'TimeSpan::hours()', this is not a function from the class 'TimeSpan'.
-Since it is not a part of the class 'TimeSpan', it does not have access to private data; 
+Since it is not a part of the class 'TimeSpan', it does not have access to private data;
 the 'const' specifier is not necessary.
 */
 int TimeSpan::hours() const {
@@ -124,6 +116,14 @@ int TimeSpan::seconds() const {
     return _seconds;
 }
 
+void TimeSpan::set_time(double hours, double minutes, double seconds) {
+    _hours = _minutes = _seconds = 0;
+    double hoursInTermsOfSeconds = convertHoursToSeconds(hours);
+    double minutesInTermsOfSeconds = convertMinutesToSeconds(minutes);
+    seconds += minutesInTermsOfSeconds + hoursInTermsOfSeconds;
+    handleNegativeSeconds(seconds);
+}
+
 /*
     OVERLOADS
 */
@@ -133,4 +133,114 @@ ostream& operator<<(ostream& stream, const TimeSpan& timeSpan) {
     int seconds = timeSpan.seconds();
     stream << hours << " hours, " << minutes << " minutes, " << seconds << " seconds";
     return stream;
+}
+
+istream& operator>>(istream& stream, TimeSpan& timeSpan) { // Does not strip leading/trailing whitespace
+    string timeSpanInput;
+    stream >> timeSpanInput;
+
+    string hourString, minuteString, secondString;
+    double hours, minutes, seconds;
+    int timeSegment = 0;
+    for (int i = 0; i < timeSpanInput.length(); i++) {
+
+        char currentChar = timeSpanInput[i];
+
+        if (currentChar == ',') {
+            timeSegment++;
+            continue;
+        } else if (currentChar == ' ') {
+            continue;
+        }
+
+        switch (timeSegment) {
+            case 0:
+                hourString += currentChar;
+                continue;
+            case 1:
+                minuteString += currentChar;
+                continue;
+            case 2:
+                secondString += currentChar;
+                continue;
+            default:
+                hourString = minuteString = secondString = "-99999";
+        }
+    }
+    hours = stod(hourString);
+    minutes = stod(minuteString);
+    seconds = stod(secondString);
+    timeSpan.set_time(hours, minutes, seconds);
+    return stream;
+}
+
+bool TimeSpan::operator==(const TimeSpan& timeSpanObject) const {
+    return (
+        _hours == timeSpanObject.hours() &&
+        _minutes == timeSpanObject.minutes() &&
+        _seconds == timeSpanObject.seconds()
+    );
+}
+
+bool TimeSpan::operator!=(const TimeSpan& timeSpanObject) const {
+    return !(
+        _hours == timeSpanObject.hours() &&
+        _minutes == timeSpanObject.minutes() &&
+        _seconds == timeSpanObject.seconds()
+    );
+}
+
+double TimeSpan::thisTimeInSeconds() const {
+    return (
+        convertHoursToSeconds(_hours) +
+        convertMinutesToSeconds(_minutes) +
+        _seconds
+    );
+}
+
+double TimeSpan::tsObjectTimeInSeconds(const TimeSpan& timeSpanObject) const {
+    return (
+        convertHoursToSeconds(timeSpanObject.hours()) +
+        convertMinutesToSeconds(timeSpanObject.minutes()) +
+        timeSpanObject.seconds()
+    );
+}
+
+bool TimeSpan::operator>(const TimeSpan& timeSpanObject) const {
+    return thisTimeInSeconds() > tsObjectTimeInSeconds(timeSpanObject);
+}
+
+bool TimeSpan::operator>=(const TimeSpan& timeSpanObject) const {
+    return thisTimeInSeconds() >= tsObjectTimeInSeconds(timeSpanObject);
+}
+
+bool TimeSpan::operator<(const TimeSpan& timeSpanObject) const {
+    return thisTimeInSeconds() < tsObjectTimeInSeconds(timeSpanObject);
+}
+
+bool TimeSpan::operator<=(const TimeSpan& timeSpanObject) const {
+    return thisTimeInSeconds() <= tsObjectTimeInSeconds(timeSpanObject);
+}
+
+TimeSpan TimeSpan::operator+(const TimeSpan& timeSpanObject) const {
+    return TimeSpan(thisTimeInSeconds()+tsObjectTimeInSeconds(timeSpanObject));
+}
+
+TimeSpan TimeSpan::operator-(const TimeSpan& timeSpanObject) const {
+    return TimeSpan(thisTimeInSeconds()-tsObjectTimeInSeconds(timeSpanObject));
+}
+
+TimeSpan TimeSpan::operator+=(const TimeSpan& timeSpanObject)  {
+    
+    double timeInSeconds = thisTimeInSeconds();
+    set_time(0, 0, timeInSeconds+=tsObjectTimeInSeconds(timeSpanObject));
+
+    return *this;
+}
+
+TimeSpan TimeSpan::operator-=(const TimeSpan& timeSpanObject)  {
+    double timeInSeconds = thisTimeInSeconds();
+    set_time(0, 0, timeInSeconds-=tsObjectTimeInSeconds(timeSpanObject));
+
+    return *this;
 }

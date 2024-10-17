@@ -12,7 +12,9 @@ class TimeSpan {
         int hours() const;
         int minutes() const;
         int seconds() const;
-        void set_time(int hours, int minutes, int seconds);
+        double thisTimeInSeconds() const;
+        double tsObjectTimeInSeconds(const TimeSpan& timeSpanObject) const;
+        void set_time(double hours, double minutes, double seconds);
 
         // CONSTRUCTOR
         TimeSpan(double hours, double minutes, double seconds);
@@ -30,26 +32,24 @@ class TimeSpan {
         
         TimeSpan operator+(const TimeSpan& timeSpanObject) const;
         TimeSpan operator-(const TimeSpan& timeSpanObject) const;
-        TimeSpan operator+=(const TimeSpan& timeSpanObject) const;
-        TimeSpan operator-=(const TimeSpan& timeSpanObject) const;
+        TimeSpan operator+=(const TimeSpan& timeSpanObject);
+        TimeSpan operator-=(const TimeSpan& timeSpanObject);
 
         friend ostream& operator<<(ostream& stream, const TimeSpan& timeSpan);
-
-
-        void secondsConversion(double seconds); // Could be private?
-        void handleNegativeSeconds(double seconds);
-        void handleNegativeMinutes(double minutes);
-        void handleNegativeHours(double hours);
-
-
+        friend istream& operator>>(istream& stream, TimeSpan& timeSpan);
 
     private:
         int _hours;
         int _minutes;
         int _seconds;
+
         void negativeToPositive(double& hours, double& minutes, double& seconds);
-        double convertMinutesToSeconds(double minutes);
-        double convertHoursToSeconds(double hours);
+        double convertMinutesToSeconds(double minutes) const;
+        double convertHoursToSeconds(double hours) const;
+        void secondsConversion(double seconds);
+        void handleNegativeSeconds(double seconds);
+        void handleNegativeMinutes(double minutes);
+        void handleNegativeHours(double hours);
 
 
 
