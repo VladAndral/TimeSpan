@@ -32,6 +32,7 @@ class TimeSpan {
         
         TimeSpan operator+(const TimeSpan& timeSpanObject) const;
         TimeSpan operator-(const TimeSpan& timeSpanObject) const;
+        TimeSpan operator-();
         TimeSpan operator+=(const TimeSpan& timeSpanObject);
         TimeSpan operator-=(const TimeSpan& timeSpanObject);
 

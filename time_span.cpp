@@ -131,42 +131,45 @@ ostream& operator<<(ostream& stream, const TimeSpan& timeSpan) {
     int hours = timeSpan.hours();
     int minutes = timeSpan.minutes();
     int seconds = timeSpan.seconds();
-    stream << hours << " hours, " << minutes << " minutes, " << seconds << " seconds";
+    stream << "Hours: " << hours << ", Minutes: " << minutes << ", Seconds: " << seconds; 
     return stream;
 }
 
 istream& operator>>(istream& stream, TimeSpan& timeSpan) { // Does not strip leading/trailing whitespace
-    string timeSpanInput;
-    stream >> timeSpanInput;
+    // string timeSpanInput;
+    // string timeSpanInput2;
+    // string timeSpanInput3;
 
     string hourString, minuteString, secondString;
+    stream >> hourString >> minuteString >> secondString;
     double hours, minutes, seconds;
-    int timeSegment = 0;
-    for (int i = 0; i < timeSpanInput.length(); i++) {
 
-        char currentChar = timeSpanInput[i];
+    // int timeSegment = 0;
+    // for (int i = 0; i < timeSpanInput.length(); i++) {
 
-        if (currentChar == ',') {
-            timeSegment++;
-            continue;
-        } else if (currentChar == ' ') {
-            continue;
-        }
+    //     char currentChar = timeSpanInput[i];
 
-        switch (timeSegment) {
-            case 0:
-                hourString += currentChar;
-                continue;
-            case 1:
-                minuteString += currentChar;
-                continue;
-            case 2:
-                secondString += currentChar;
-                continue;
-            default:
-                hourString = minuteString = secondString = "-99999";
-        }
-    }
+    //     if (currentChar == ',') {
+    //         timeSegment++;
+    //         continue;
+    //     } else if (currentChar == ' ') {
+    //         continue;
+    //     }
+
+    //     switch (timeSegment) {
+    //         case 0:
+    //             hourString += currentChar;
+    //             continue;
+    //         case 1:
+    //             minuteString += currentChar;
+    //             continue;
+    //         case 2:
+    //             secondString += currentChar;
+    //             continue;
+    //         default:
+    //             hourString = minuteString = secondString = "-99999";
+    //     }
+    // }
     hours = stod(hourString);
     minutes = stod(minuteString);
     seconds = stod(secondString);
@@ -228,6 +231,10 @@ TimeSpan TimeSpan::operator+(const TimeSpan& timeSpanObject) const {
 
 TimeSpan TimeSpan::operator-(const TimeSpan& timeSpanObject) const {
     return TimeSpan(thisTimeInSeconds()-tsObjectTimeInSeconds(timeSpanObject));
+}
+
+TimeSpan TimeSpan::operator-() {
+    return TimeSpan(-thisTimeInSeconds());
 }
 
 TimeSpan TimeSpan::operator+=(const TimeSpan& timeSpanObject)  {

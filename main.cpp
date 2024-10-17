@@ -6,14 +6,14 @@ using namespace std;
 bool tests();
 
 int main() {
-    tests();
-    // TimeSpan testObj1, testObj2;
-    // cout << "Enter time1, \"h, m, s\" " << endl;
-    // cin >> testObj1;
-    // cout << "Enter time2, \"h, m, s\" " << endl;
-    // cin >> testObj2;
+    // tests();
+    TimeSpan testObj1, testObj2;
+    cout << "Enter time1, \"h, m, s\" " << endl;
+    cin >> testObj1;
+    cout << "Enter time2, \"h, m, s\" " << endl;
+    cin >> testObj2;
 
-    // cout << testObj1+testObj2 << endl;
+    cout << testObj1+testObj2 << endl;
 
 }
 
@@ -103,7 +103,6 @@ bool TestSetTime() {
     
 }
 
-
 bool TestAdd() {
     TimeSpan ts1, ts2(5), ts3(7, 0), ts4(4, 0, 0);
     TimeSpan add_it_up = ts1 + ts2 + ts3 + ts4;
@@ -125,6 +124,35 @@ bool TestAddInPlace() {
         return true;
 
     }
+}
+
+bool TestSubtract() {
+    TimeSpan ts1, ts2(5), ts3(7, 0), ts4(4, 0, 0);
+    TimeSpan add_it_up = ts1 - ts2 - ts3 - ts4;
+    // cout << add_it_up << endl;
+    return CheckValues(add_it_up, -4, -7, -5);
+}
+
+bool TestSubtractInPlace() {
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2(1, 1, 1);
+    if ((!CheckValues(ts1, 5, 6, 7)) || (!CheckValues(ts2, 1, 1, 1))) {
+        return false;
+    }
+    ts1 -= ts2;
+    // cout << ts1 << endl;
+    if ((!CheckValues(ts1, 4, 5, 6)) || (!CheckValues(ts2, 1, 1, 1))) {
+        return false;
+    } else {
+        return true;
+
+    }
+}
+
+bool TestUnaryNegation() {
+    TimeSpan ts1(5, 6, 7);
+    TimeSpan ts2 = -ts1;
+    return CheckValues(ts2, -5, -6, -7);
 
 }
 
@@ -145,6 +173,9 @@ bool tests() {
     if (!TestSetTime()) cout << "    Failed: TestSetTime" << endl;
     if (!TestAdd()) cout << "	Failed: TestAdd" << endl;
     if (!TestAddInPlace()) cout << "	Failed: TestAddInPlace" << endl;
+    if (!TestSubtract()) cout << "	Failed: TestSubtract" << endl;
+    if (!TestSubtractInPlace()) cout << "	Failed: TestSubtractInPlace" << endl;
+    if (!TestUnaryNegation()) cout << "	Failed: TestUnaryNegation" << endl;
     cout << "Testing Complete" << endl;
     return true;
 }
