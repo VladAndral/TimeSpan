@@ -7,23 +7,21 @@ bool tests();
 
 int main() {
     tests();
-    TimeSpan testObj1, testObj2;
-    cout << "Enter time1, \"h, m, s\" " << endl;
-    cin >> testObj1;
-    cout << "Enter time2, \"h, m, s\" " << endl;
-    cin >> testObj2;
+    // TimeSpan testObj1, testObj2;
+    // cout << "Enter time1, \"h, m, s\" " << endl;
+    // cin >> testObj1;
+    // cout << "Enter time2, \"h, m, s\" " << endl;
+    // cin >> testObj2;
 
-    cout << testObj1+testObj2 << endl;
+    // cout << testObj1+testObj2 << endl;
 
 }
 
 
 
-
-
 bool defaultCreated() {
     TimeSpan ts;
-    return ((ts.hours() == -999) && (ts.minutes() == -999) && (ts.seconds() == -999));
+    return ((ts.hours() == 0) && (ts.minutes() == 0) && (ts.seconds() == 0));
 }
 
 bool CheckValues(TimeSpan time, int hours, int minutes, int seconds) {
@@ -46,7 +44,7 @@ bool TestNormal() {
 
 bool Test60() {
     TimeSpan ts(60, 60, 60);
-    cout << ts << endl;
+    // cout << ts << endl;
     return CheckValues(ts, 60, 60, 60);
 }
 
@@ -109,7 +107,7 @@ bool TestSetTime() {
 bool TestAdd() {
     TimeSpan ts1, ts2(5), ts3(7, 0), ts4(4, 0, 0);
     TimeSpan add_it_up = ts1 + ts2 + ts3 + ts4;
-    cout << add_it_up << endl;
+    // cout << add_it_up << endl;
     return CheckValues(add_it_up, 4, 7, 5);
 }
 
@@ -127,10 +125,6 @@ bool TestAddInPlace() {
         return true;
 
     }
-
-    // ts1 += ts2;
-    // cout << ts1 << endl;
-    // return CheckValues(ts1, 6, 7, 8);
 
 }
 
