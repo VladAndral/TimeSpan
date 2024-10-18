@@ -9,10 +9,17 @@ using namespace std;
 */
 TimeSpan::TimeSpan() : _hours(0), _minutes(0), _seconds(0) {   }
 
+/*
+    @param seconds
+*/
 TimeSpan::TimeSpan(double seconds) : _hours(0), _minutes(0), _seconds(0) {
     handleNegativeSeconds(seconds);
 }
 
+/*
+    @param minutes
+    @param seconds
+*/
 TimeSpan::TimeSpan(double minutes, double seconds) : _hours(0), _minutes(0), _seconds(0) {
 
     double minutesInTermsOfSeconds = convertMinutesToSeconds(minutes);
@@ -20,6 +27,11 @@ TimeSpan::TimeSpan(double minutes, double seconds) : _hours(0), _minutes(0), _se
     handleNegativeSeconds(seconds);
 }
 
+/*
+    @param hours
+    @param minutes
+    @param seconds
+*/
 TimeSpan::TimeSpan(double hours, double minutes, double seconds) : _hours(0), _minutes(0), _seconds(0) {
 
     double hoursInTermsOfSeconds = convertHoursToSeconds(hours);
@@ -31,15 +43,30 @@ TimeSpan::TimeSpan(double hours, double minutes, double seconds) : _hours(0), _m
 /*
         CONVERTING TIME METHODS
 */
+
+/*
+    Converts time given in minutes to time in terms of seconds
+    @param minutes
+    @return seconds time in seconds, as double
+*/
 double TimeSpan::convertMinutesToSeconds(double minutes) const {
     return minutes*60;
 }
 
+/*
+    Converts time given in hours to time in terms of seconds
+    @param hours
+    @return seconds time in seconds, as double
+*/
 double TimeSpan::convertHoursToSeconds(double hours) const {
     return hours*60*60;
 }
 
-void TimeSpan::secondsConversion(double seconds) { // 127.86 seconds = 2 minutes .131 minutes
+/*
+    Converts time in seconds to time in hours, minutes, seconds and sets as object fields
+    @param seconds time in seconds
+*/
+void TimeSpan::convertSecondsToFullAndSet(double seconds) { // 127.86 seconds = 2 minutes .131 minutes
 
     double timeInMinutes = seconds/60; // 127.86(seconds)/60 = 2.131 (minutes)
     int convertedMinutes = int(timeInMinutes); // 2
@@ -60,6 +87,10 @@ void TimeSpan::secondsConversion(double seconds) { // 127.86 seconds = 2 minutes
     _hours += convertedHours;
 }
 
+/*
+    Converts time in seconds to time in hours, minutes, seconds and subtracts from object fields if negative. Sets object fields.
+    @param seconds time in seconds
+*/
 void TimeSpan::handleNegativeSeconds(double seconds) {
 
     if ((seconds != 0) && (abs(seconds-1)) > abs(seconds) ) { // Check if seconds is negative
@@ -85,10 +116,14 @@ void TimeSpan::handleNegativeSeconds(double seconds) {
         seconds = int(seconds)%60; // loop around from the subrtraction
     }
 
-    secondsConversion(seconds);
+    convertSecondsToFullAndSet(seconds);
 
 }
 
+/*
+    Converts time in minutes to hours, minutes, seconds and subtracts from object fields if input is negative. Sets object fields
+    @param minutes time in minutes
+*/
 void TimeSpan::handleNegativeMinutes(double minutes) {
     handleNegativeSeconds(convertMinutesToSeconds(minutes));
 }
@@ -106,16 +141,32 @@ Without the 'TimeSpan::hours()', this is not a function from the class 'TimeSpan
 Since it is not a part of the class 'TimeSpan', it does not have access to private data;
 the 'const' specifier is not necessary.
 */
+
+/*
+    Return this time object's hours (not full time) as an integer
+*/
 int TimeSpan::hours() const {
     return _hours;
 }
+/*
+    Return this time object's minutes (not full time) as an integer
+*/
 int TimeSpan::minutes() const {
     return _minutes;
 }
+/*
+    Return this time object's seconds (not full time) as an integer
+*/
 int TimeSpan::seconds() const {
     return _seconds;
 }
 
+/*
+    Sets and overrides this time object's fields with inputted hours, minutes, seconds
+    @param hours
+    @param minutes
+    @param seconds
+*/
 void TimeSpan::set_time(double hours, double minutes, double seconds) {
     _hours = _minutes = _seconds = 0;
     double hoursInTermsOfSeconds = convertHoursToSeconds(hours);
@@ -127,6 +178,10 @@ void TimeSpan::set_time(double hours, double minutes, double seconds) {
 /*
     OVERLOADS
 */
+
+/*
+    Prints time object as "Hours: ##, Minutes: ##, Seconds:## "
+*/
 ostream& operator<<(ostream& stream, const TimeSpan& timeSpan) {
     int hours = timeSpan.hours();
     int minutes = timeSpan.minutes();
@@ -135,6 +190,10 @@ ostream& operator<<(ostream& stream, const TimeSpan& timeSpan) {
     return stream;
 }
 
+/*
+    Takes in three doubles (e.g. "5 9 12.5") and sets this time object's fields with input
+    @param INPUT: string with three doubles/ints, separated by space " 8 19.6 4.0"
+*/
 istream& operator>>(istream& stream, TimeSpan& timeSpan) { // Does not strip leading/trailing whitespace
     // string timeSpanInput;
     // string timeSpanInput2;
@@ -177,6 +236,9 @@ istream& operator>>(istream& stream, TimeSpan& timeSpan) { // Does not strip lea
     return stream;
 }
 
+/*
+    @return boolean whether this time objet's time is the same as the one to be compared
+*/
 bool TimeSpan::operator==(const TimeSpan& timeSpanObject) const {
     return (
         _hours == timeSpanObject.hours() &&
@@ -185,6 +247,9 @@ bool TimeSpan::operator==(const TimeSpan& timeSpanObject) const {
     );
 }
 
+/*
+    @return boolean whether this time objet's time is not the same as the one to be compared
+*/
 bool TimeSpan::operator!=(const TimeSpan& timeSpanObject) const {
     return !(
         _hours == timeSpanObject.hours() &&
@@ -193,6 +258,9 @@ bool TimeSpan::operator!=(const TimeSpan& timeSpanObject) const {
     );
 }
 
+/*
+    @return seconds this time object's full time in terms of seconds,
+*/
 double TimeSpan::thisTimeInSeconds() const {
     return (
         convertHoursToSeconds(_hours) +
@@ -201,6 +269,10 @@ double TimeSpan::thisTimeInSeconds() const {
     );
 }
 
+/*
+    @param TimeSpanObject the time object to find the time of
+    @return seconds inputted time object's full time in terms of seconds,
+*/
 double TimeSpan::tsObjectTimeInSeconds(const TimeSpan& timeSpanObject) const {
     return (
         convertHoursToSeconds(timeSpanObject.hours()) +
@@ -208,6 +280,7 @@ double TimeSpan::tsObjectTimeInSeconds(const TimeSpan& timeSpanObject) const {
         timeSpanObject.seconds()
     );
 }
+
 
 bool TimeSpan::operator>(const TimeSpan& timeSpanObject) const {
     return thisTimeInSeconds() > tsObjectTimeInSeconds(timeSpanObject);

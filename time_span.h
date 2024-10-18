@@ -47,13 +47,10 @@ class TimeSpan {
         void negativeToPositive(double& hours, double& minutes, double& seconds);
         double convertMinutesToSeconds(double minutes) const;
         double convertHoursToSeconds(double hours) const;
-        void secondsConversion(double seconds);
+        void convertSecondsToFullAndSet(double seconds);
         void handleNegativeSeconds(double seconds);
         void handleNegativeMinutes(double minutes);
         void handleNegativeHours(double hours);
-
-
-
 
 };
 
